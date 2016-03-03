@@ -5,6 +5,9 @@ public class PlayerController : MonoBehaviour {
 	// PUBLIC INSTANCE VARIABLES +++++++++++++++++++++++++++++++++++++++
 	public float speed;
 	public Boundary boundary;
+	public BoardController boardController;
+
+	private Transform _transform;
 
 	// get a reference to the camera to make mouse input work
 	public Camera camera; 
@@ -14,7 +17,7 @@ public class PlayerController : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-
+		this._transform = gameObject.GetComponent<Transform> ();
 	}
 
 	// Update is called once per frame
@@ -42,7 +45,7 @@ public class PlayerController : MonoBehaviour {
 
 		this._BoundaryCheck ();
 
-		gameObject.GetComponent<Transform>().position = this._newPosition;
+		this._transform.position = this._newPosition;
 	}
 
 	private void _BoundaryCheck() {
@@ -54,4 +57,15 @@ public class PlayerController : MonoBehaviour {
 			this._newPosition.x = this.boundary.xMax;
 		}
 	}
+	void OnCollisionEnter2D(Collision2D other){
+
+		if (other.gameObject.CompareTag ("Enemy")) {
+
+			Destroy (other.gameObject);
+
+			this.boardController.LivesValue--;
+		}
+	}
+
+
 }
